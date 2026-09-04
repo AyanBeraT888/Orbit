@@ -1,0 +1,157 @@
+/* ─── Ultra Zero-Lag 60 FPS Map & Orbit Loader ─────────────────── */
+
+.orbit-loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  user-select: none;
+}
+
+/* 3D Map Grid Container */
+.orbit-radar-stage {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 600px;
+}
+
+/* Tilted 3D Map Plane */
+.orbit-map-plane {
+  position: absolute;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  transform: rotateX(60deg) rotateZ(0deg);
+  animation: planeSpin 12s linear infinite;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, rgba(15, 23, 42, 0.6) 70%);
+  border: 1.5px solid rgba(37, 99, 235, 0.4);
+  box-shadow: 0 0 30px rgba(37, 99, 235, 0.3), inset 0 0 20px rgba(37, 99, 235, 0.2);
+}
+
+/* Radar Grid Lines */
+.orbit-radar-grid {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-image: 
+    radial-gradient(circle, transparent 30%, rgba(37, 99, 235, 0.25) 31%, transparent 32%),
+    radial-gradient(circle, transparent 60%, rgba(37, 99, 235, 0.25) 61%, transparent 62%);
+}
+
+/* Sonar Pulse Ring */
+.orbit-sonar-pulse {
+  position: absolute;
+  inset: 10px;
+  border-radius: 50%;
+  border: 2px solid rgba(37, 99, 235, 0.8);
+  opacity: 0;
+  animation: sonarWave 2.4s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+.orbit-sonar-pulse.delay {
+  animation-delay: 1.2s;
+}
+
+/* Orbiting Satellites Ring 1 */
+.orbit-ring-primary {
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  border: 1px dashed rgba(59, 130, 246, 0.4);
+  animation: orbitRotate 3.5s linear infinite;
+}
+
+.orbit-satellite-1 {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 12px;
+  background: #3b82f6;
+  border-radius: 50%;
+  box-shadow: 0 0 12px #3b82f6, 0 0 24px rgba(37, 99, 235, 0.9);
+}
+
+/* Orbiting Satellites Ring 2 (Reverse) */
+.orbit-ring-secondary {
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  border: 1px dotted rgba(96, 165, 250, 0.3);
+  animation: orbitRotateReverse 5s linear infinite;
+}
+
+.orbit-satellite-2 {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  background: #60a5fa;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #60a5fa;
+}
+
+/* Center Map Pin Emblem */
+.orbit-center-pin {
+  position: relative;
+  z-index: 5;
+  width: 46px;
+  height: 46px;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 0 25px rgba(37, 99, 235, 0.8), 0 4px 12px rgba(0, 0, 0, 0.4);
+  animation: pinPulse 2s ease-in-out infinite;
+}
+
+/* Keyframes */
+@keyframes planeSpin {
+  0% { transform: rotateX(60deg) rotateZ(0deg); }
+  100% { transform: rotateX(60deg) rotateZ(360deg); }
+}
+
+@keyframes sonarWave {
+  0% { transform: scale(0.3); opacity: 1; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+@keyframes orbitRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes orbitRotateReverse {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes pinPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 25px rgba(37, 99, 235, 0.8); }
+  50% { transform: scale(1.08); box-shadow: 0 0 40px rgba(59, 130, 246, 1); }
+}
+
+/* Loading Text */
+.orbit-loader-text {
+  color: #e2e8f0;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #93c5fd 0%, #2563eb 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(37, 99, 235, 0.3);
+}

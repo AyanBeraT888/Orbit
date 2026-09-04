@@ -1,0 +1,166 @@
+/* ─── Lottie-Style Animated Enable/Disable Toggle ─────────────────── */
+
+.lottie-toggle-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.lottie-toggle-wrapper.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Track container */
+.lottie-toggle-track {
+  position: relative;
+  width: 52px;
+  height: 28px;
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  transition: background 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+              border-color 0.35s ease,
+              box-shadow 0.35s ease;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Size variations */
+.lottie-toggle-wrapper.sm .lottie-toggle-track {
+  width: 42px;
+  height: 24px;
+}
+
+.lottie-toggle-wrapper.lg .lottie-toggle-track {
+  width: 62px;
+  height: 34px;
+}
+
+/* Glow Effect */
+.lottie-toggle-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(circle at center, rgba(37, 99, 235, 0.4) 0%, transparent 70%);
+}
+
+.lottie-toggle-wrapper.is-on .lottie-toggle-glow {
+  opacity: 1;
+}
+
+.lottie-toggle-wrapper.is-on .lottie-toggle-track {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  border-color: rgba(37, 99, 235, 0.6);
+  box-shadow: 0 0 16px rgba(37, 99, 235, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+/* State Icons Inside Track */
+.lottie-toggle-icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+}
+
+.icon-on {
+  left: 8px;
+  color: #ffffff;
+  opacity: 0;
+  transform: translateY(-50%) scale(0.5);
+}
+
+.icon-off {
+  right: 8px;
+  color: rgba(255, 255, 255, 0.4);
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+
+.lottie-toggle-wrapper.is-on .icon-on {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+
+.lottie-toggle-wrapper.is-on .icon-off {
+  opacity: 0;
+  transform: translateY(-50%) scale(0.5);
+}
+
+/* Sliding Knob with Elastic Spring physics */
+.lottie-toggle-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3), 0 0 2px rgba(0, 0, 0, 0.2);
+  transition: transform 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6),
+              width 0.2s ease;
+  z-index: 2;
+}
+
+.lottie-toggle-wrapper.sm .lottie-toggle-knob {
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+}
+
+.lottie-toggle-wrapper.lg .lottie-toggle-knob {
+  top: 3px;
+  left: 3px;
+  width: 26px;
+  height: 26px;
+}
+
+.lottie-toggle-wrapper.is-on .lottie-toggle-knob {
+  transform: translateX(24px);
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+.lottie-toggle-wrapper.sm.is-on .lottie-toggle-knob {
+  transform: translateX(18px);
+}
+
+.lottie-toggle-wrapper.lg.is-on .lottie-toggle-knob {
+  transform: translateX(28px);
+}
+
+/* Active press animation (stretching knob) */
+.lottie-toggle-wrapper:active:not(.disabled) .lottie-toggle-knob {
+  width: 25px;
+  border-radius: 12px;
+}
+
+.knob-pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: transparent;
+  transition: border 0.3s ease;
+}
+
+.lottie-toggle-wrapper.is-on .knob-pulse {
+  border: 2px solid rgba(37, 99, 235, 0.6);
+}
+
+/* Label styling */
+.lottie-toggle-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #e2e8f0;
+}

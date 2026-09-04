@@ -1,0 +1,1 @@
+Boundary data: geoBoundaries (Runfola D, Anderson A, Baier H, Crittenden M, Dowker E, Fuhrig S, et al. (2020) geoBoundaries: A global database of political administrative boundaries. PLoS ONE 15(4): e0231866.), CC-BY 4.0.

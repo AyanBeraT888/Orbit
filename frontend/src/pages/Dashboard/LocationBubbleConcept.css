@@ -1,0 +1,1051 @@
+/* LocationBubbleConcept.css - Mobile Home Screen Interactive Drag-and-Drop Concept */
+
+.bubble-concept-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  background: radial-gradient(circle at top left, rgba(34, 197, 94, 0.05), transparent 40%),
+    radial-gradient(circle at bottom right, rgba(99, 102, 241, 0.05), transparent 40%),
+    rgba(15, 23, 42, 0.2);
+  min-height: 580px;
+}
+
+/* Simulated Mobile Frame */
+.mobile-frame {
+  width: 360px;
+  height: 640px;
+  border-radius: 40px;
+  background: radial-gradient(circle at 50% 0%, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.95));
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    0 0 0 12px rgba(15, 23, 42, 0.9),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+}
+
+/* Dynamic Ambient Glow */
+.ambient-glow-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at var(--glow-x, 50%) var(--glow-y, 50%), rgba(34, 197, 94, 0.15) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 1;
+  transition: background 0.3s ease;
+}
+
+/* Simulated Mobile Notch & Status Bar */
+.mobile-notch {
+  width: 140px;
+  height: 24px;
+  background: #000;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.notch-camera {
+  width: 8px;
+  height: 8px;
+  background: #1e293b;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.notch-speaker {
+  width: 40px;
+  height: 4px;
+  background: #334155;
+  border-radius: 20px;
+}
+
+.mobile-status-bar {
+  height: 38px;
+  padding: 12px 24px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.72rem;
+  font-weight: 600;
+  z-index: 90;
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: 0.05em;
+}
+
+.status-bar-icons {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+/* Header UI Elements */
+.simulator-header {
+  padding: 1rem 1.5rem 0.5rem;
+  z-index: 10;
+}
+
+.simulator-title-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.simulator-title-bar h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.simulator-subtitle {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 2px;
+  margin-bottom: 0;
+}
+
+/* Interactive Floating Canvas Area */
+.floating-canvas {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  z-index: 5;
+  overflow: hidden;
+}
+
+/* Floating Avatar Bubbles */
+.floating-bubble-wrapper {
+  position: absolute;
+  cursor: grab;
+  touch-action: none;
+  z-index: 20;
+  transition: transform 0.15s ease-out, opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.floating-bubble-wrapper:active {
+  cursor: grabbing;
+  z-index: 100;
+}
+
+/* Dragging state shadows and scaling */
+.floating-bubble-wrapper.is-dragging {
+  transition: none !important;
+}
+
+.floating-bubble-wrapper.is-dragging .bubble-body {
+  transform: scale(1.12);
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(var(--glow-color-rgb), 0.5);
+  cursor: grabbing;
+}
+
+/* Gentle Bobbing Animations */
+.bobbing-0 {
+  animation: bob-soft-0 6s ease-in-out infinite alternate;
+}
+
+.bobbing-1 {
+  animation: bob-soft-1 7.2s ease-in-out infinite alternate;
+}
+
+.bobbing-2 {
+  animation: bob-soft-2 5.5s ease-in-out infinite alternate;
+}
+
+.bobbing-3 {
+  animation: bob-soft-3 6.8s ease-in-out infinite alternate;
+}
+
+.bobbing-4 {
+  animation: bob-soft-4 8s ease-in-out infinite alternate;
+}
+
+@keyframes bob-soft-0 {
+  0% {
+    transform: translateY(0) rotate(-1deg);
+  }
+
+  100% {
+    transform: translateY(-12px) rotate(1deg);
+  }
+}
+
+@keyframes bob-soft-1 {
+  0% {
+    transform: translateY(-6px) rotate(2deg);
+  }
+
+  100% {
+    transform: translateY(8px) rotate(-1deg);
+  }
+}
+
+@keyframes bob-soft-2 {
+  0% {
+    transform: translateY(4px) rotate(-2deg);
+  }
+
+  100% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+}
+
+@keyframes bob-soft-3 {
+  0% {
+    transform: translateY(-12px) rotate(-1deg);
+  }
+
+  100% {
+    transform: translateY(4px) rotate(2deg);
+  }
+}
+
+@keyframes bob-soft-4 {
+  0% {
+    transform: translateY(-3px) rotate(1deg);
+  }
+
+  100% {
+    transform: translateY(-15px) rotate(-2deg);
+  }
+}
+
+/* Main Bubble Design */
+.bubble-body {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(30, 41, 59, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25),
+    inset 0 1px 2px rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+  pointer-events: none;
+  /* Mouse handled by wrapper */
+}
+
+/* Dynamic Glowing Rings using pseudo elements */
+.bubble-body::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 50%;
+  border: 2px solid var(--glow-color);
+  opacity: 0.65;
+  box-shadow: 0 0 8px var(--glow-color),
+    inset 0 0 4px var(--glow-color);
+  animation: glow-ring-breath 3s ease-in-out infinite alternate;
+}
+
+@keyframes glow-ring-breath {
+  0% {
+    opacity: 0.45;
+    transform: scale(0.98);
+  }
+
+  100% {
+    opacity: 0.85;
+    transform: scale(1.02);
+  }
+}
+
+/* Location Pin Badge */
+.location-pin-badge {
+  position: absolute;
+  bottom: -3px;
+  right: -3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--glow-color);
+  border: 2px solid rgba(15, 23, 42, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.location-pin-badge svg {
+  width: 10px;
+  height: 10px;
+  stroke-width: 3px;
+}
+
+/* Avatar Text & Styling */
+.bubble-avatar-text {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Small Group Clusters (2 overlapping avatars) */
+.cluster-2 {
+  display: flex;
+  position: relative;
+  width: 52px;
+  height: 52px;
+}
+
+.cluster-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #1e293b;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+  position: absolute;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+.cluster-avatar:nth-child(1) {
+  top: 4px;
+  left: 4px;
+  z-index: 2;
+}
+
+.cluster-avatar:nth-child(2) {
+  bottom: 4px;
+  right: 4px;
+  z-index: 1;
+}
+
+/* Small Group Clusters (3 overlapping avatars) */
+.cluster-3 {
+  display: flex;
+  position: relative;
+  width: 52px;
+  height: 52px;
+}
+
+.cluster-3 .cluster-avatar:nth-child(1) {
+  top: 2px;
+  left: 10px;
+  z-index: 3;
+}
+
+.cluster-3 .cluster-avatar:nth-child(2) {
+  bottom: 2px;
+  left: 2px;
+  z-index: 2;
+}
+
+.cluster-3 .cluster-avatar:nth-child(3) {
+  bottom: 2px;
+  right: 2px;
+  z-index: 1;
+}
+
+/* Group Icon Avatar Custom */
+.group-icon-avatar {
+  font-size: 1.45rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Bubble Name Overlay label on Hover */
+.bubble-label-tag {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(4px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.floating-bubble-wrapper:hover .bubble-label-tag,
+.floating-bubble-wrapper.is-dragging .bubble-label-tag {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Bottom Center Target Control System */
+.target-dock-section {
+  position: absolute;
+  bottom: 34px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 30;
+  pointer-events: none;
+}
+
+.target-glow-ring {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+/* Large Location Button with Neumorphic Pulse */
+.large-location-btn {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+}
+
+.large-location-btn svg {
+  width: 28px;
+  height: 28px;
+  transition: transform 0.4s, color 0.4s;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* Location Button Hover & Proximity Reactivity */
+.large-location-btn:hover {
+  transform: scale(1.06);
+  color: #fff;
+}
+
+/* When dragging active anywhere */
+.large-location-btn.dragging-active {
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6),
+    0 0 25px rgba(34, 197, 94, 0.2);
+  border-color: rgba(34, 197, 94, 0.3);
+  animation: target-breath-glowing 2s infinite alternate;
+}
+
+@keyframes target-breath-glowing {
+  0% {
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.1), inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  }
+
+  100% {
+    box-shadow: 0 0 30px rgba(34, 197, 94, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* When bubble is hovering right above target */
+.large-location-btn.near-target {
+  transform: scale(1.15);
+  border-color: #22c55e;
+  box-shadow: 0 0 45px rgba(34, 197, 94, 0.7),
+    0 0 0 8px rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+}
+
+.large-location-btn.near-target svg {
+  transform: scale(1.12) rotate(15deg);
+}
+
+/* LOCATION ON State */
+.large-location-btn.location-active {
+  background: radial-gradient(circle at 35% 35%, #22c55e, #15803d);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  box-shadow: 0 0 60px rgba(34, 197, 94, 0.8),
+    inset 0 2px 4px rgba(255, 255, 255, 0.4);
+  animation: active-heartbeat 1.2s infinite;
+}
+
+.large-location-btn.location-active svg {
+  transform: scale(1.2) rotate(0deg);
+  color: #fff;
+}
+
+@keyframes active-heartbeat {
+  0% {
+    transform: scale(1.0);
+  }
+
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 0 70px rgba(34, 197, 94, 0.95);
+  }
+
+  100% {
+    transform: scale(1.0);
+  }
+}
+
+/* Location Status Label */
+.location-status-label {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 10px;
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+
+.location-status-label.active {
+  color: #22c55e;
+  text-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+}
+
+/* Smooth Circular Ripple Grid Effects */
+.ripple-waves-holder {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 400px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.ripple-wave {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  border: 1px solid rgba(34, 197, 94, 0.5);
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.08) 0%, transparent 60%);
+  transform: translate(-50%, -50%) scale(0.1);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Triggered Ripple animations */
+.ripple-wave.trigger-0 {
+  animation: ripple-expand 1.4s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
+.ripple-wave.trigger-1 {
+  animation: ripple-expand 1.4s cubic-bezier(0.1, 0.8, 0.3, 1) 0.25s forwards;
+}
+
+.ripple-wave.trigger-2 {
+  animation: ripple-expand 1.4s cubic-bezier(0.1, 0.8, 0.3, 1) 0.5s forwards;
+}
+
+@keyframes ripple-expand {
+  0% {
+    transform: translate(-50%, -50%) scale(0.1);
+    opacity: 0.9;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1.6);
+    opacity: 0;
+    border-color: rgba(34, 197, 94, 0);
+  }
+}
+
+/* Active Broadcast Beacon Waves */
+.active-pulse-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: transparent;
+  border: 2px dashed rgba(34, 197, 94, 0.3);
+  pointer-events: none;
+  animation: rotate-dashed 12s linear infinite;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 1;
+}
+
+.active-pulse-ring.visible {
+  opacity: 1;
+}
+
+@keyframes rotate-dashed {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* Proximity Visual Guidelines Target Ring */
+.proximity-ring-visual {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.06);
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.proximity-ring-visual.dragging-active {
+  border-color: rgba(34, 197, 94, 0.15);
+  animation: pulse-guideline 1.5s infinite alternate;
+}
+
+@keyframes pulse-guideline {
+  0% {
+    transform: scale(0.98);
+    opacity: 0.4;
+  }
+
+  100% {
+    transform: scale(1.05);
+    opacity: 0.95;
+  }
+}
+
+/* Drag Success Floating Toast Message */
+.concept-floating-toast {
+  position: absolute;
+  top: 64px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(20, 28, 22, 0.95);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4),
+    0 0 15px rgba(34, 197, 94, 0.1);
+  padding: 8px 16px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 200;
+  font-family: 'Outfit', sans-serif;
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  animation: toast-slide-down 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes toast-slide-down {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.toast-success-check {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #22c55e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+/* Simulator Close button */
+.simulator-close-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.simulator-close-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.simulator-close-btn:active {
+  transform: scale(0.95);
+}
+
+/* Modal Overlay for Simulator Container */
+.simulator-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(10, 15, 30, 0.85);
+  backdrop-filter: blur(12px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: modal-overlay-fade 0.3s ease;
+}
+
+@keyframes modal-overlay-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.simulator-modal-content {
+  animation: modal-content-zoom 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes modal-content-zoom {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Grid Guideline Background for screen overlay */
+.canvas-grid-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* Hide other bubbles when one starts sharing */
+.floating-bubble-wrapper.other-bubble-hidden {
+  opacity: 0;
+  transform: scale(0.2) !important;
+  pointer-events: none;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* State when bubble is actively sharing */
+.floating-bubble-wrapper.is-sharing-active {
+  cursor: default;
+  z-index: 150;
+  transition: left 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
+    top 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: sharing-bob 3s ease-in-out infinite alternate;
+}
+
+@keyframes sharing-bob {
+  0% {
+    transform: translateY(0) scale(1.08);
+  }
+
+  100% {
+    transform: translateY(-8px) scale(1.08);
+  }
+}
+
+/* Shrink and fade active bubble into the Location FAB when ending sharing */
+.floating-bubble-wrapper.is-ending-shrink {
+  opacity: 0;
+  transform: scale(0) translateY(140px) !important;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  pointer-events: none;
+}
+
+/* Glowing Pulse Live Pill Badge */
+.live-pulsing-badge {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ef4444;
+  color: white;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4);
+  letter-spacing: 0.05em;
+  z-index: 10;
+  animation: live-pill-pulse 1.5s infinite alternate;
+}
+
+.live-dot {
+  width: 5px;
+  height: 5px;
+  background: white;
+  border-radius: 50%;
+  animation: live-dot-pulse 1s infinite alternate;
+}
+
+@keyframes live-pill-pulse {
+  0% {
+    transform: translateX(-50%) scale(1);
+  }
+
+  100% {
+    transform: translateX(-50%) scale(1.08);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.6);
+  }
+}
+
+@keyframes live-dot-pulse {
+  0% {
+    opacity: 0.3;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Override title label when sharing */
+.floating-bubble-wrapper.is-sharing-active .bubble-label-tag {
+  opacity: 1 !important;
+  transform: translateX(-50%) translateY(0) !important;
+  background: rgba(34, 197, 94, 0.9);
+  border-color: rgba(34, 197, 94, 0.2);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25);
+}
+
+/* ─── Ultra-Premium Glassmorphic Quick Action Card ─────────────────── */
+.bubble-quick-actions-card {
+  position: absolute;
+  bottom: 85px;
+  left: 16px;
+  right: 16px;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  border-radius: 24px;
+  padding: 16px 18px;
+  z-index: 999;
+  box-shadow: 
+    0 24px 60px rgba(0, 0, 0, 0.75),
+    0 0 35px rgba(37, 99, 235, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: cardSpringEntrance 0.38s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes cardSpringEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.qa-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 10px;
+}
+
+.qa-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.qa-avatar-badge {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(37, 99, 235, 0.6);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+}
+
+.qa-user-title {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.qa-user-name {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: -0.01em;
+}
+
+.qa-user-status {
+  font-size: 0.76rem;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.qa-close-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.qa-close-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #ef4444;
+  transform: rotate(90deg) scale(1.1);
+}
+
+.qa-actions-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.qa-action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 8px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.qa-action-btn:hover {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.3) 0%, rgba(29, 78, 216, 0.4) 100%);
+  border-color: rgba(59, 130, 246, 0.6);
+  color: #ffffff;
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+}
+
+.qa-action-btn:active {
+  transform: translateY(0) scale(0.96);
+}
+
+.qa-action-btn.active-sharing {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  border-color: rgba(96, 165, 250, 0.8);
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(37, 99, 235, 0.7), inset 0 1px 2px rgba(255, 255, 255, 0.3);
+  animation: activeSharingPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes activeSharingPulse {
+  0% { box-shadow: 0 0 16px rgba(37, 99, 235, 0.6); }
+  100% { box-shadow: 0 0 28px rgba(59, 130, 246, 0.9); }
+}
+
+.qa-btn-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  transition: all 0.25s ease;
+}
+
+.qa-action-btn:hover .qa-btn-icon {
+  background: #2563eb;
+  color: #ffffff;
+  transform: scale(1.1);
+  box-shadow: 0 0 12px rgba(37, 99, 235, 0.8);
+}
+
+.qa-action-btn.active-sharing .qa-btn-icon {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
