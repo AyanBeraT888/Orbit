@@ -2,75 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { MapPin, X, Sparkles, Check, Compass, Radio } from 'lucide-react';
 import './LocationBubbleConcept.css';
 
-const INITIAL_BUBBLES = [
-  {
-    id: 'solo-alice',
-    name: 'Alice Smith',
-    avatar: 'A',
-    color: '#3b82f6',
-    rgb: '59, 130, 246',
-    x: 45,
-    y: 60,
-    label: 'Alice Smith (5m ago)',
-    isGroup: false,
-    overlapsCount: 1,
-    bobClass: 'bobbing-0'
-  },
-  {
-    id: 'solo-bob',
-    name: 'Bob Jones',
-    avatar: 'B',
-    color: '#f59e0b',
-    rgb: '245, 158, 11',
-    x: 235,
-    y: 110,
-    label: 'Bob Jones (12m ago)',
-    isGroup: false,
-    overlapsCount: 1,
-    bobClass: 'bobbing-1'
-  },
-  {
-    id: 'group-ai',
-    name: 'AI Club Group',
-    avatar: '🤖',
-    color: '#8b5cf6',
-    rgb: '139, 92, 246',
-    x: 35,
-    y: 200,
-    label: 'AI & Gadgets Group Hub',
-    isGroup: true,
-    overlapsCount: 1,
-    bobClass: 'bobbing-2'
-  },
-  {
-    id: 'cluster-charlie-david',
-    name: 'Charlie & David',
-    avatar: 'CD',
-    color: '#10b981',
-    rgb: '16, 185, 129',
-    x: 240,
-    y: 245,
-    label: 'Charlie & David Cluster',
-    isGroup: false,
-    overlapsCount: 2,
-    overlaps: ['C', 'D'],
-    bobClass: 'bobbing-3'
-  },
-  {
-    id: 'cluster-triple',
-    name: 'Eva, Frank & You',
-    avatar: 'EFY',
-    color: '#ec4899',
-    rgb: '236, 72, 153',
-    x: 135,
-    y: 135,
-    label: 'Eva, Frank & You Cluster',
-    isGroup: false,
-    overlapsCount: 3,
-    overlaps: ['E', 'F', 'Y'],
-    bobClass: 'bobbing-4'
-  }
-];
+const INITIAL_BUBBLES = [];
 
 const LocationBubbleConcept = ({ onClose }) => {
   const [bubbles, setBubbles] = useState(

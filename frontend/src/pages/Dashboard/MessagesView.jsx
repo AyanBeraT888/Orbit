@@ -10,43 +10,15 @@ import GroupsView from './GroupsView';
 import CommunitiesView from './CommunitiesView';
 import './MessagesView.css';
 
-/* ─── Friends list (mirrors FriendsView mock data) ───────────── */
-const ALL_FRIENDS = [
-  { id: 'u1', name: 'alice99',  avatar: 'a', online: true  },
-  { id: 'u2', name: 'bob_j',   avatar: 'b', online: false },
-  { id: 'u3', name: 'charlieD',avatar: 'c', online: false },
-  { id: 'u4', name: 'd_lee',   avatar: 'd', online: true  },
-];
+/* ─── Friends list ───────────── */
+const ALL_FRIENDS = [];
 
 /* ─── Icon options for groups/communities ─────────────────────── */
 const GROUP_ICONS    = ['group','design','support','general','rocket','planet'];
 const COMM_ICONS     = ['globe','sparkles','image','cpu','target','palette'];
 
-/* ─── Mock Data ──────────────────────────────────────────────── */
-const MOCK_MESSAGES = {
-  1: [
-    { id: 1, from: 'them', text: 'Hey! Are we still meeting tonight?', time: '9:41 AM', reactions: {} },
-    { id: 2, from: 'me',   text: 'Yes, absolutely! 7 PM at the usual place?', time: '9:42 AM', reactions: { like: 1 } },
-    { id: 3, from: 'them', type: 'location_event', senderName: 'alice99', status: 'active', time: '9:43 AM', reactions: {} },
-  ],
-  2: [
-    { id: 1, from: 'them', text: "Did you see that movie last night?", time: '8:00 PM', reactions: {} },
-    { id: 2, from: 'me',   text: "Yes! The ending was wild", time: '8:02 PM', reactions: {} },
-    { id: 3, from: 'them', text: "haha yeah exactly", time: '8:03 PM', reactions: {} },
-    { id: 4, from: 'them', type: 'location_event', senderName: 'bob_j', status: 'ended', durationText: '42 min', time: '8:05 PM', reactions: {} }
-  ],
-  3: [
-    {
-      id: 1, from: 'them', type: 'poll',
-      poll: { question: 'Are you coming to the party?', options: ['Yes', 'No'], votes: { 'Yes': 3, 'No': 1 }, voted: null },
-      time: '3:00 PM', reactions: {}
-    },
-  ],
-  4: [
-    { id: 1, from: 'them', text: 'Leaving now!', time: '11:00 AM', reactions: {} },
-    { id: 2, from: 'me',   text: 'On my way!',   time: '11:01 AM', reactions: {} },
-  ],
-};
+/* ─── Messages Data ──────────────────────────────────────────── */
+const MOCK_MESSAGES = {};
 
 const REACTIONS_AVAILABLE = ['like', 'love', 'haha', 'wow', 'fire'];
 
@@ -439,12 +411,7 @@ const MessagesView = ({ initialPartner, onClearInitialPartner, onClose, isSharin
   const longPressTimeout = useRef(null);
   const touchStartPos = useRef({ x: 0, y: 0 });
 
-  const MOCK_PROFILES = {
-    'alice99':  { uuid: 'usr-alice-998877',   name: 'Alice Smith',  username: 'alice99',  joinDate: '2024-04-12T08:00:00.000Z', stampsCount: 3, friendsCount: 14, rank: 'Urban Pioneer',       bio: 'Chasing sunsets and new coordinate pins! 🌅✈' },
-    'bob_j':   { uuid: 'usr-bob-554433',     name: 'Bob Jones',    username: 'bob_j',   joinDate: '2023-11-05T08:00:00.000Z', stampsCount: 2, friendsCount: 9,  rank: 'Regional Trekker',    bio: 'Coffee, code, and campsites. ☕⛺' },
-    'charlieD':{ uuid: 'usr-charlie-221100', name: 'Charlie Day',  username: 'charlieD',joinDate: '2025-01-15T08:00:00.000Z', stampsCount: 3, friendsCount: 5,  rank: 'Local Scout',         bio: 'Just a city slicker exploring green spaces.' },
-    'd_lee':   { uuid: 'usr-david-334455',   name: 'David Lee',    username: 'd_lee',   joinDate: '2024-08-20T08:00:00.000Z', stampsCount: 3, friendsCount: 12, rank: 'Urban Pioneer',       bio: 'Wandering where the WiFi is weak.' },
-  };
+  const MOCK_PROFILES = {};
 
   const handleOpenProfile = (convo) => {
     if (!convo || convo.type !== 'chat') return;
@@ -471,23 +438,7 @@ const MessagesView = ({ initialPartner, onClearInitialPartner, onClose, isSharin
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  const [unifiedItems, setUnifiedItems] = useState([
-    {
-      id: 'chat-1', type: 'chat', name: 'alice99',
-      lastMsg: 'alice99 started sharing location', lastMsgType: 'location_event',
-      lastMsgStatus: 'active', lastMsgSender: 'alice99',
-      time: '2m', timestamp: Date.now() - 2 * 60 * 1000, unread: 2, online: true, avatar: 'a',
-    },
-    { id: 'group-g1', type: 'group', name: 'Weekend Crew', lastMsg: "What's the plan this weekend?", time: '5m', timestamp: Date.now() - 5 * 60 * 1000, unread: 0, avatarList: ['Y', 'A', 'B'] },
-    { id: 'community-c1', type: 'community', name: 'Tech Enthusiasts', lastMsg: 'bob_j: Neumorphic UIs are making a comeback!', time: '15m', timestamp: Date.now() - 15 * 60 * 1000, unread: 0, icon: 'globe' },
-    { id: 'chat-2', type: 'chat', name: 'bob_j', lastMsg: 'haha yeah exactly', time: '10m', timestamp: Date.now() - 10 * 60 * 1000, unread: 0, online: false, avatar: 'b' },
-    { id: 'chat-3', type: 'chat', name: 'charlieD', lastMsg: 'Poll: Are you coming?', time: '1h', timestamp: Date.now() - 60 * 60 * 1000, unread: 1, online: false, avatar: 'c' },
-    { id: 'group-g2', type: 'group', name: 'Design Lab', lastMsg: 'No messages yet', time: '1d', timestamp: Date.now() - 24 * 60 * 60 * 1000, unread: 0, avatarList: ['C', 'D'] },
-    { id: 'community-c2', type: 'community', name: 'Orb Official Support', lastMsg: 'Official announcements and updates from Orb.', time: 'Yesterday', timestamp: Date.now() - 30 * 60 * 60 * 1000, unread: 0, icon: 'support' },
-    { id: 'chat-4', type: 'chat', name: 'd_lee', lastMsg: 'On my way!', time: '3h', timestamp: Date.now() - 3 * 60 * 60 * 1000, unread: 0, online: true, avatar: 'd' },
-    { id: 'group-g3', type: 'group', name: 'Orb Support', lastMsg: 'No messages yet', time: '2d', timestamp: Date.now() - 2 * 24 * 60 * 60 * 1000, unread: 0, avatarList: ['A', 'E'] },
-    { id: 'community-c3', type: 'community', name: 'Secret Designers Club', lastMsg: 'Advanced glassmorphism sandbox discussions.', time: '2d', timestamp: Date.now() - 2 * 24 * 60 * 60 * 1000 - 1000, unread: 0, icon: 'design' },
-  ]);
+  const [unifiedItems, setUnifiedItems] = useState([]);
 
   /* ── Creation handlers ── */
   const handleOpenChat = (friend) => {

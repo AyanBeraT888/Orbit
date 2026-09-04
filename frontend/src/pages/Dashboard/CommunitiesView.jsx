@@ -21,247 +21,10 @@ const ORB_AVATARS = [
   { name: 'Fire Engine', value: '🔥' },
   { name: 'Golden Shield', value: '🛡️' }
 ];
+const MOCK_USERS = {};
 
-const MOCK_USERS = {
-  u1: { name: 'Alice Smith', avatar: 'A' },
-  u2: { name: 'Bob Jones', avatar: 'B' },
-  u3: { name: 'Charlie Day', avatar: 'C' },
-  u4: { name: 'David Lee', avatar: 'D' },
-  u5: { name: 'Eva Green', avatar: 'E' },
-  me: { name: 'You', avatar: 'Y' }
-};
-
-/* ─── Mock Communities with Nested Groups (WhatsApp Style) ─── */
-const INITIAL_COMMUNITIES = [
-  {
-    id: 'c1',
-    name: 'Tech Enthusiasts',
-    description: 'A global hub for everything tech, web dev, AI, and gadgets.',
-    isVerified: true,
-    isDeveloperBadge: true,
-    badgeLabel: 'Developer Approved',
-    isGlobal: true,
-    type: 'open',
-    icon: 'globe',
-    iconType: 'orb',
-    memberCount: 1450,
-    members: ['me', 'u1', 'u2', 'u3', 'u4', 'u5'],
-    coadmins: ['u1'],
-    pendingRequests: [],
-    creator: 'u2',
-    liveShare: false,
-    isFavourite: false,
-    memberTags: {},
-    pinnedMessages: [],
-    adminOnlyMessaging: false,
-    groups: [
-      {
-        id: 'c1-announcements',
-        name: 'Announcements',
-        isAnnouncements: true,
-        icon: 'announcements',
-        description: 'Official announcements and updates for Tech Enthusiasts.',
-        members: ['me', 'u1', 'u2', 'u3', 'u4', 'u5'],
-        messages: [
-          {
-            id: 1,
-            from: 'u1',
-            senderName: 'Alice Smith',
-            text: 'Welcome to the Tech Enthusiasts community announcements channel! Only admins can post here.',
-            time: '10:15 AM',
-            reactions: { fire: 2 },
-            reactionsDetail: { fire: ['u2', 'u3'] },
-            views: ['me', 'u1', 'u2', 'u3', 'u4'],
-            deleted: false,
-            deletedFor: []
-          },
-          {
-            id: 2,
-            from: 'u2',
-            senderName: 'Bob Jones',
-            text: 'Check out the general discussion groups in the community home to talk about coding, design, and hardware!',
-            time: '10:18 AM',
-            reactions: { like: 1 },
-            reactionsDetail: { like: ['u3'] },
-            views: ['me', 'u1', 'u2', 'u3'],
-            deleted: false,
-            deletedFor: []
-          }
-        ]
-      },
-      {
-        id: 'c1-g1',
-        name: 'AI & Gadgets',
-        icon: 'ai',
-        description: 'Discuss the latest trends in AI, LLMs, robotics, and hardware gadgets.',
-        members: ['me', 'u1', 'u2', 'u3'],
-        messages: [
-          {
-            id: 10,
-            from: 'u1',
-            senderName: 'Alice Smith',
-            text: 'Hey guys, did you see the new AI announcement?',
-            time: '10:30 AM',
-            reactions: { fire: 2 },
-            reactionsDetail: { fire: ['u2', 'u3'] },
-            views: ['me', 'u1', 'u2', 'u3'],
-            deleted: false,
-            deletedFor: []
-          },
-          {
-            id: 11,
-            from: 'u2',
-            senderName: 'Bob Jones',
-            text: 'Yeah, it looks super promising! Neumorphic UIs are making a comeback too.',
-            time: '10:32 AM',
-            reactions: { fire: 2, like: 1 },
-            reactionsDetail: { fire: ['u1', 'me'], like: ['u3'] },
-            views: ['me', 'u1', 'u2', 'u3'],
-            deleted: false,
-            deletedFor: []
-          },
-          {
-            id: 12,
-            from: 'me',
-            senderName: 'You',
-            text: 'I am building a web app using it right now!',
-            time: '10:35 AM',
-            reactions: {},
-            reactionsDetail: {},
-            views: ['u1', 'u2', 'u3'],
-            deleted: false,
-            deletedFor: []
-          }
-        ]
-      },
-      {
-        id: 'c1-g2',
-        name: 'Web Dev & Design',
-        icon: 'coding',
-        description: 'Web development, frontend frameworks, CSS tricks, and Neumorphism sandboxing.',
-        members: ['u1', 'u4', 'u5'],
-        messages: [
-          {
-            id: 20,
-            from: 'u4',
-            senderName: 'David Lee',
-            text: 'Welcome to the Web Dev subgroup! Post your projects and codepens here.',
-            time: 'Yesterday',
-            reactions: {},
-            reactionsDetail: {},
-            views: ['u1', 'u4', 'u5'],
-            deleted: false,
-            deletedFor: []
-          }
-        ]
-      }
-    ]
-  },
-  {
-    id: 'c2',
-    name: 'Orb Official Support',
-    description: 'The official global community for Orb updates, bug reports, and suggestions.',
-    isVerified: true,
-    isDeveloperBadge: true,
-    badgeLabel: 'Official Hub',
-    isGlobal: true,
-    type: 'open',
-    icon: 'support',
-    iconType: 'emoji',
-    memberCount: 5200,
-    members: ['u1', 'u4', 'me'],
-    coadmins: ['me'],
-    pendingRequests: [],
-    creator: 'u4',
-    liveShare: false,
-    isFavourite: false,
-    memberTags: {},
-    pinnedMessages: [],
-    adminOnlyMessaging: false,
-    groups: [
-      {
-        id: 'c2-announcements',
-        name: 'Announcements',
-        isAnnouncements: true,
-        icon: 'announcements',
-        description: 'Official announcements and updates from the Orb Team.',
-        members: ['u1', 'u4', 'me'],
-        messages: [
-          {
-            id: 1,
-            from: 'u4',
-            senderName: 'David Lee',
-            text: 'Welcome to the official Orb support channel! We will post releases and patches here.',
-            time: 'Yesterday',
-            reactions: { like: 2 },
-            reactionsDetail: { like: ['u1', 'me'] },
-            views: ['me', 'u1', 'u4'],
-            deleted: false,
-            deletedFor: []
-          }
-        ]
-      },
-      {
-        id: 'c2-g1',
-        name: 'Bug Reports & Support',
-        icon: 'bugs',
-        description: 'Submit issues and bugs encountered in the Orb app.',
-        members: ['me', 'u1', 'u4'],
-        messages: []
-      },
-      {
-        id: 'c2-g2',
-        name: 'Feature Suggestions',
-        icon: 'features',
-        description: 'Request features and suggest visual improvements.',
-        members: ['u1', 'u4'],
-        messages: []
-      }
-    ]
-  },
-  {
-    id: 'c3',
-    name: 'Secret Designers Club',
-    description: 'A semi-private sandbox for neumorphic UI and advanced glassmorphism design layouts.',
-    isVerified: false,
-    isDeveloperBadge: false,
-    isGlobal: true,
-    type: 'request',
-    icon: 'design',
-    iconType: 'emoji',
-    memberCount: 84,
-    members: ['u2', 'u3'],
-    coadmins: [],
-    pendingRequests: [
-      { id: 'me', name: 'You', avatar: 'Y' }
-    ],
-    creator: 'u2',
-    liveShare: false,
-    isFavourite: false,
-    memberTags: {},
-    pinnedMessages: [],
-    adminOnlyMessaging: false,
-    groups: [
-      {
-        id: 'c3-announcements',
-        name: 'Announcements',
-        isAnnouncements: true,
-        icon: 'announcements',
-        description: 'Official announcements for Secret Designers Club.',
-        members: ['u2', 'u3'],
-        messages: []
-      },
-      {
-        id: 'c3-g1',
-        name: 'Design Sandbox',
-        icon: 'sandbox',
-        description: 'Showcase glassmorphism code snippets and premium layouts.',
-        members: ['u2', 'u3'],
-        messages: []
-      }
-    ]
-  }
-];
+/* ─── Communities ─── */
+const INITIAL_COMMUNITIES = [];
 
 const WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 const MEET_TIMES = ['4pm onwards', '6pm onwards', '8pm onwards'];
@@ -742,8 +505,7 @@ const CommunitiesView = ({ onOpenMessage, onClose, isSharingLocation, setIsShari
     if (!member) return;
 
     const isMe = member.id === 'me' || member.uuid === 'self';
-    const friendsList = ['u1', 'u2', 'u3', 'u4', 'u5'];
-    const isFriend = isMe || friendsList.includes(member.id);
+    const isFriend = isMe;
 
     let fullProfile;
     if (isMe) {
@@ -754,53 +516,29 @@ const CommunitiesView = ({ onOpenMessage, onClose, isSharingLocation, setIsShari
         username: userData.username || 'me',
         joinDate: userData.createdAt || '2026-01-01T00:00:00.000Z',
         stampsCount: 0,
-        friendsCount: friendsList.length,
+        friendsCount: 0,
         rank: 'Elite Cartographer',
         bio: localStorage.getItem('user_bio_self') || 'Exploring the world one stamp at a time! 📍'
       };
     } else {
-      // Seed mock details for the ProfileView component to look professional:
-      const mockProfiles = {
-        u1: { uuid: 'usr-alice-998877', name: 'Alice Smith', username: 'alice99', joinDate: '2024-04-12T08:00:00.000Z', stampsCount: 3, friendsCount: 14, rank: 'Urban Pioneer', bio: 'Chasing sunsets and new coordinate pins! 🌅✈' },
-        u2: { uuid: 'usr-bob-554433', name: 'Bob Jones', username: 'bob_j', joinDate: '2023-11-05T08:00:00.000Z', stampsCount: 2, friendsCount: 9, rank: 'Regional Trekker', bio: 'Coffee, code, and campsites. ☕⛺' },
-        u3: { uuid: 'usr-charlie-221100', name: 'Charlie Day', username: 'charlieD', joinDate: '2025-01-15T08:00:00.000Z', stampsCount: 3, friendsCount: 5, rank: 'Local Scout', bio: 'Just a city slicker exploring green spaces.' },
-        u4: { uuid: 'usr-david-334455', name: 'David Lee', username: 'd_lee', joinDate: '2024-08-20T08:00:00.000Z', stampsCount: 3, friendsCount: 12, rank: 'Urban Pioneer', bio: 'Wandering where the WiFi is weak.' },
-        u5: { uuid: 'usr-eve-889900', name: 'Eva Green', username: 'eva_g', joinDate: '2025-05-01T08:00:00.000Z', stampsCount: 1, friendsCount: 3, rank: 'Wanderer Initiate', bio: 'Beginner mapmaker and stamp collector!' }
-      };
-
-      fullProfile = mockProfiles[member.id] || {
-        uuid: `usr-${member.id}-112233`,
-        name: member.name || 'Group Member',
-        username: member.username || member.name?.toLowerCase().replace(' ', '_') || 'member',
-        joinDate: '2025-02-10T08:00:00.000Z',
-        stampsCount: 2,
-        friendsCount: 6,
-        rank: 'Local Scout',
-        bio: 'Adventures are better together. 🗺️👥'
+      fullProfile = {
+        uuid: member.uuid || `usr-${member.id || 'unknown'}`,
+        name: member.name || 'Member',
+        username: member.username || member.name?.toLowerCase().replace(/\s+/g, '_') || 'member',
+        joinDate: member.joinDate || '2026-01-01T00:00:00.000Z',
+        stampsCount: member.stampsCount || 0,
+        friendsCount: member.friendsCount || 0,
+        rank: member.rank || 'Explorer',
+        bio: member.bio || ''
       };
     }
 
     setSelectedProfileUser(fullProfile);
     setSelectedUserIsFriend(isFriend);
 
-    // Dynamically seed localStorage for profile view matching MOCK_USER_CHAPTERS
     if (isFriend && fullProfile.uuid) {
       if (!localStorage.getItem(`user_bio_${fullProfile.uuid}`)) {
         localStorage.setItem(`user_bio_${fullProfile.uuid}`, fullProfile.bio || '');
-      }
-      const customChapters = {
-        'usr-alice-998877': [
-          { id: 'stamp-alice-paris', placeName: 'Eiffel Tower', city: 'Paris', lat: 48.8584, lng: 2.2945, photos: [{ id: 'paris-1', url: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=600&auto=format&fit=crop', caption: 'Eiffel Tower glittering under sunset skies.', location: 'Eiffel Tower, Paris', likes: 34 }] },
-          { id: 'stamp-alice-kiyomizu', placeName: 'Kiyomizu-dera', city: 'Kyoto', lat: 34.9948, lng: 135.7850, photos: [{ id: 'kyoto-1', url: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=600&auto=format&fit=crop', caption: 'Beautiful red maple leaves at Kiyomizu-dera.', location: 'Kiyomizu-dera, Kyoto', likes: 22 }] },
-          { id: 'stamp-alice-centralpark', placeName: 'Central Park', city: 'New York', lat: 40.7851, lng: -73.9683, photos: [{ id: 'ny-1', url: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?q=80&w=600&auto=format&fit=crop', caption: 'Snowy morning walks in Central Park.', location: 'Central Park, NY', likes: 18 }] }
-        ],
-        'usr-bob-554433': [
-          { id: 'stamp-bob-lauterbrunnen', placeName: 'Lauterbrunnen Valley', city: 'Lauterbrunnen', lat: 46.5930, lng: 7.9088, photos: [{ id: 'swiss-1', url: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=600&auto=format&fit=crop', caption: 'Waking up to the serene view of Lauterbrunnen valley.', location: 'Lauterbrunnen, Switzerland', likes: 41 }] },
-          { id: 'stamp-bob-colosseum', placeName: 'Colosseum', city: 'Rome', lat: 41.8902, lng: 12.4922, photos: [{ id: 'rome-1', url: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?q=80&w=600&auto=format&fit=crop', caption: 'Treading history around the Colosseum.', location: 'Colosseum, Rome', likes: 29 }] }
-        ]
-      };
-      if (!localStorage.getItem(`user_stamps_${fullProfile.uuid}`) && customChapters[fullProfile.uuid]) {
-        localStorage.setItem(`user_stamps_${fullProfile.uuid}`, JSON.stringify(customChapters[fullProfile.uuid]));
       }
     }
 

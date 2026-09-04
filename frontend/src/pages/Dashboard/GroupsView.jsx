@@ -12,22 +12,12 @@ import ProfileView from './ProfileView';
 import LottieToggle from '../../components/LottieToggle';
 
 /* ─── Mock Data ─────────────────────────────────── */
-const ALL_FRIENDS = [
-  { id: 'u1', name: 'Alice Smith', avatar: 'A' },
-  { id: 'u2', name: 'Bob Jones', avatar: 'B' },
-  { id: 'u3', name: 'Charlie Day', avatar: 'C' },
-  { id: 'u4', name: 'David Lee', avatar: 'D' },
-  { id: 'u5', name: 'Eva Green', avatar: 'E' },
-];
+const ALL_FRIENDS = [];
 
 const ME = { id: 'me', name: 'You', avatar: 'Y' };
 
-// Predefined Mock Communities list to link groups to
-const MOCK_COMMUNITIES = [
-  { id: 'c1', name: 'Tech Enthusiasts' },
-  { id: 'c2', name: 'Orb Official Support' },
-  { id: 'c3', name: 'Secret Designers Club' }
-];
+// Predefined Communities list to link groups to
+const MOCK_COMMUNITIES = [];
 
 const WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 const MEET_TIMES = ['4pm onwards', '6pm onwards', '8pm onwards'];
@@ -641,35 +631,7 @@ const GroupOverviewModal = ({
 
 /* ─── Main GroupsView ───────────────────────────── */
 const GroupsView = ({ onOpenMessage, onClose, isSharingLocation, setIsSharingLocation, groupId, embedded = false, additionalGroups = [] }) => {
-  const [groups, setGroups] = useState([
-    {
-      id: 'g1', name: 'Weekend Crew', coadmins: ['u2'], icon: 'group',
-      description: 'Planning weekend meetups, road trips, and pizzas.',
-      members: [ALL_FRIENDS[0], ALL_FRIENDS[1], ALL_FRIENDS[2]],
-      messages: [
-        { id: 1, from: 'u1', text: 'Hey everyone!', time: '10:00 AM', reactions: {} },
-        { id: 2, from: 'me', text: 'What\'s the plan this weekend?', time: '10:01 AM', reactions: { love: 2 } },
-      ],
-      liveShare: false, isFavourite: false, communityId: null, memberTags: {},
-      pinnedMessages: [], adminOnlyMessaging: false
-    },
-    {
-      id: 'g2', name: 'Design Lab', coadmins: [], icon: 'design',
-      description: 'Discussing neumorphic design systems and UI animations.',
-      members: [ALL_FRIENDS[2], ALL_FRIENDS[3]],
-      messages: [],
-      liveShare: false, isFavourite: false, communityId: null, memberTags: {},
-      pinnedMessages: [], adminOnlyMessaging: false
-    },
-    {
-      id: 'g3', name: 'Orb Support', coadmins: ['u4'], icon: 'support',
-      description: 'Official group for Orb questions and answers.',
-      members: [ALL_FRIENDS[0], ALL_FRIENDS[4]],
-      messages: [],
-      liveShare: false, isFavourite: false, communityId: null, memberTags: {},
-      pinnedMessages: [], adminOnlyMessaging: false
-    }
-  ]);
+  const [groups, setGroups] = useState([]);
 
   /* ── Merge externally-created groups (from MessagesView kebab) ── */
   useEffect(() => {
@@ -731,48 +693,24 @@ const GroupsView = ({ onOpenMessage, onClose, isSharingLocation, setIsSharingLoc
         bio: localStorage.getItem('user_bio_self') || 'Exploring the world one stamp at a time! 📍'
       };
     } else {
-      // Seed mock details for the ProfileView component to look professional:
-      const mockProfiles = {
-        u1: { uuid: 'usr-alice-998877', name: 'Alice Smith', username: 'alice99', joinDate: '2024-04-12T08:00:00.000Z', stampsCount: 3, friendsCount: 14, rank: 'Urban Pioneer', bio: 'Chasing sunsets and new coordinate pins! 🌅✈' },
-        u2: { uuid: 'usr-bob-554433', name: 'Bob Jones', username: 'bob_j', joinDate: '2023-11-05T08:00:00.000Z', stampsCount: 2, friendsCount: 9, rank: 'Regional Trekker', bio: 'Coffee, code, and campsites. ☕⛺' },
-        u3: { uuid: 'usr-charlie-221100', name: 'Charlie Day', username: 'charlieD', joinDate: '2025-01-15T08:00:00.000Z', stampsCount: 3, friendsCount: 5, rank: 'Local Scout', bio: 'Just a city slicker exploring green spaces.' },
-        u4: { uuid: 'usr-david-334455', name: 'David Lee', username: 'd_lee', joinDate: '2024-08-20T08:00:00.000Z', stampsCount: 3, friendsCount: 12, rank: 'Urban Pioneer', bio: 'Wandering where the WiFi is weak.' },
-        u5: { uuid: 'usr-eve-889900', name: 'Eva Green', username: 'eva_g', joinDate: '2025-05-01T08:00:00.000Z', stampsCount: 1, friendsCount: 3, rank: 'Wanderer Initiate', bio: 'Beginner mapmaker and stamp collector!' }
-      };
-
-      fullProfile = mockProfiles[member.id] || {
-        uuid: `usr-${member.id}-112233`,
+      fullProfile = {
+        uuid: member.uuid || `usr-${member.id || 'unknown'}`,
         name: member.name || 'Group Member',
-        username: member.username || member.name?.toLowerCase().replace(' ', '_') || 'member',
-        joinDate: '2025-02-10T08:00:00.000Z',
-        stampsCount: 2,
-        friendsCount: 6,
-        rank: 'Local Scout',
-        bio: 'Adventures are better together. 🗺️👥'
+        username: member.username || member.name?.toLowerCase().replace(/\s+/g, '_') || 'member',
+        joinDate: member.joinDate || '2026-01-01T00:00:00.000Z',
+        stampsCount: member.stampsCount || 0,
+        friendsCount: member.friendsCount || 0,
+        rank: member.rank || 'Explorer',
+        bio: member.bio || ''
       };
     }
 
     setSelectedProfileUser(fullProfile);
     setSelectedUserIsFriend(isFriend);
 
-    // Dynamically seed custom Bio / Chapters count in localStorage for the full ProfileView component!
     if (isFriend && fullProfile.uuid) {
       if (!localStorage.getItem(`user_bio_${fullProfile.uuid}`)) {
         localStorage.setItem(`user_bio_${fullProfile.uuid}`, fullProfile.bio || '');
-      }
-      const customChapters = {
-        'usr-alice-998877': [
-          { id: 'stamp-alice-paris', placeName: 'Eiffel Tower', city: 'Paris', lat: 48.8584, lng: 2.2945, photos: [{ id: 'paris-1', url: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=600&auto=format&fit=crop', caption: 'Eiffel Tower glittering under sunset skies.', location: 'Eiffel Tower, Paris', likes: 34 }] },
-          { id: 'stamp-alice-kiyomizu', placeName: 'Kiyomizu-dera', city: 'Kyoto', lat: 34.9948, lng: 135.7850, photos: [{ id: 'kyoto-1', url: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=600&auto=format&fit=crop', caption: 'Beautiful red maple leaves at Kiyomizu-dera.', location: 'Kiyomizu-dera, Kyoto', likes: 22 }] },
-          { id: 'stamp-alice-centralpark', placeName: 'Central Park', city: 'New York', lat: 40.7851, lng: -73.9683, photos: [{ id: 'ny-1', url: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?q=80&w=600&auto=format&fit=crop', caption: 'Snowy morning walks in Central Park.', location: 'Central Park, NY', likes: 18 }] }
-        ],
-        'usr-bob-554433': [
-          { id: 'stamp-bob-lauterbrunnen', placeName: 'Lauterbrunnen Valley', city: 'Lauterbrunnen', lat: 46.5930, lng: 7.9088, photos: [{ id: 'swiss-1', url: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=600&auto=format&fit=crop', caption: 'Waking up to the serene view of Lauterbrunnen valley.', location: 'Lauterbrunnen, Switzerland', likes: 41 }] },
-          { id: 'stamp-bob-colosseum', placeName: 'Colosseum', city: 'Rome', lat: 41.8902, lng: 12.4922, photos: [{ id: 'rome-1', url: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?q=80&w=600&auto=format&fit=crop', caption: 'Treading history around the Colosseum.', location: 'Colosseum, Rome', likes: 29 }] }
-        ]
-      };
-      if (!localStorage.getItem(`user_stamps_${fullProfile.uuid}`) && customChapters[fullProfile.uuid]) {
-        localStorage.setItem(`user_stamps_${fullProfile.uuid}`, JSON.stringify(customChapters[fullProfile.uuid]));
       }
     }
 
