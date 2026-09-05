@@ -6,10 +6,12 @@
     "dev:frontend": "npm run dev --prefix frontend -- --open",
     "dev:backend": "npm run dev --prefix backend",
     "build": "npm run build --prefix frontend",
+    "deploy": "npm run build --prefix frontend && gh-pages -d frontend/dist --dotfiles --nojekyll",
     "start": "npm start --prefix backend",
     "install-all": "npm install --prefix backend && npm install --prefix frontend"
   },
   "devDependencies": {
-    "concurrently": "^10.0.5"
+    "concurrently": "^10.0.5",
+    "gh-pages": "^6.3.0"
   }
 }
