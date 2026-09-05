@@ -13,7 +13,7 @@ import MapDetailsPanel from './MapDetailsPanel';
 import { escapeHtml } from '../../utils/escapeHtml';
 
 // TomTom API Key for real-time traffic flow and incident layers
-const TOMTOM_API_KEY = import.meta.env.VITE_TOMTOM_API_KEY || 'YOUR_TOMTOM_API_KEY';
+const TOMTOM_API_KEY = import.meta.env.VITE_TOMTOM_API_KEY || 'yD5XM0QjP9bAjEemIJgJsUTm1qE94bjW';
 
 // ─── Distance helper (Haversine formula) ─────────────────────────────────────
 
