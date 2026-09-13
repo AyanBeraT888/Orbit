@@ -6,7 +6,7 @@ import {
   Bookmark, Share2, Sparkles, Clock, Volume2, RotateCcw, Bus, Star, Info, MoreVertical, Phone, HelpCircle, Trash2,
   Sliders, Map as MapIcon, Plus, Utensils, Fuel, Coffee, ShoppingCart, Users, Grid
 } from 'lucide-react';
-import maplibregl from 'maplibre-gl';
+import * as maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import api from '../../services/api';
 import MapDetailsPanel from './MapDetailsPanel';

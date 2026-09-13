@@ -11,7 +11,7 @@ import './CommunitiesView.css';
 import ProfileView from './ProfileView';
 import LottieToggle from '../../components/LottieToggle';
 import { compressImage } from '../../utils/imageCompressor';
-import { sanitizeImageSrc } from '../../utils/sanitizeUrl';
+import { validateImageSrc, sanitizeImageSrc } from '../../utils/sanitizeUrl';
 
 /* ─── Predefined Orb Avatars ──────────────────────────────── */
 const ORB_AVATARS = [
@@ -243,7 +243,11 @@ const CommunityOverviewModal = ({
         <div className="overview-details-section">
           <div className="overview-header-inputs">
             <div className="form-group-row">
-              <span className="icon-preview-large rounded-sq-preview">{icon}</span>
+              {community.iconType === 'upload' && community.avatarUrl && validateImageSrc(community.avatarUrl) ? (
+                <img src={validateImageSrc(community.avatarUrl)} alt={name} className="icon-preview-large rounded-sq-preview" />
+              ) : (
+                <span className="icon-preview-large rounded-sq-preview">{icon}</span>
+              )}
               <div className="info-title-col">
                 {canEdit && isEditingInfo ? (
                   <input
@@ -635,11 +639,11 @@ const CommunitiesView = ({ onOpenMessage, onClose, isSharingLocation, setIsShari
       setEditDesc(activeComm.description || '');
       setEditIconMode(activeComm.iconType || 'emoji');
       if (activeComm.iconType === 'orb') {
-        setEditOrbIcon(activeComm.icon);
+        setEditOrbIcon(activeComm.icon || '🪐');
       } else if (activeComm.iconType === 'upload') {
-        setEditUploadedIcon(activeComm.icon);
+        setEditUploadedIcon(activeComm.avatarUrl || '');
       } else {
-        setEditEmojiIcon(activeComm.icon);
+        setEditEmojiIcon(activeComm.icon || '🌐');
       }
     }
   }, [showSettingsModal, activeCommId]);
@@ -1136,9 +1140,11 @@ const CommunitiesView = ({ onOpenMessage, onClose, isSharingLocation, setIsShari
   const handleUpdateDetails = () => {
     if (!editName.trim() || !activeComm) return;
 
-    let chosenIcon = editEmojiIcon;
+    let chosenIcon = editEmojiIcon.trim() || '🌐';
     if (editIconMode === 'orb') chosenIcon = editOrbIcon;
-    if (editIconMode === 'upload') chosenIcon = editUploadedIcon || '🌐';
+    if (editIconMode === 'upload') chosenIcon = '🌐';
+
+    const uploadedAvatar = editIconMode === 'upload' && editUploadedIcon ? validateImageSrc(editUploadedIcon) : '';
 
     setCommunities(prev => prev.map(c => {
       if (c.id !== activeComm.id) return c;
@@ -1147,7 +1153,8 @@ const CommunitiesView = ({ onOpenMessage, onClose, isSharingLocation, setIsShari
         name: editName.trim(),
         description: editDesc.trim(),
         iconType: editIconMode,
-        icon: chosenIcon
+        icon: chosenIcon,
+        avatarUrl: uploadedAvatar
       };
     }));
     setShowSettingsModal(false);
@@ -1157,9 +1164,11 @@ const CommunitiesView = ({ onOpenMessage, onClose, isSharingLocation, setIsShari
   const handleCreateCommunity = () => {
     if (!newName.trim() || !newDesc.trim()) return;
 
-    let chosenIcon = emojiIcon;
+    let chosenIcon = emojiIcon.trim() || '🌐';
     if (iconMode === 'orb') chosenIcon = orbIcon;
-    if (iconMode === 'upload') chosenIcon = uploadedIcon || '🌐';
+    if (iconMode === 'upload') chosenIcon = '🌐';
+
+    const uploadedAvatar = iconMode === 'upload' && uploadedIcon ? validateImageSrc(uploadedIcon) : '';
 
     const commId = `c${Date.now()}`;
     const newComm = {
@@ -1171,6 +1180,7 @@ const CommunitiesView = ({ onOpenMessage, onClose, isSharingLocation, setIsShari
       isGlobal: true,
       type: newType,
       icon: chosenIcon,
+      avatarUrl: uploadedAvatar,
       iconType: iconMode,
       memberCount: 1,
       members: ['me'],
@@ -1327,8 +1337,8 @@ const CommunitiesView = ({ onOpenMessage, onClose, isSharingLocation, setIsShari
                     }}
                   >
                     <div className="comm-square-icon-wrap">
-                      {c.iconType === 'upload' && sanitizeImageSrc(c.icon) ? (
-                        <img src={sanitizeImageSrc(c.icon)} alt={c.name} className="comm-uploaded-icon-thumb rounded-square" />
+                      {c.iconType === 'upload' && (c.avatarUrl || '') && validateImageSrc(c.avatarUrl) ? (
+                        <img src={validateImageSrc(c.avatarUrl)} alt={c.name} className="comm-uploaded-icon-thumb rounded-square" />
                       ) : (
                         <span className="comm-emoji-large">{getCommIcon(c)}</span>
                       )}
@@ -1441,8 +1451,8 @@ const CommunitiesView = ({ onOpenMessage, onClose, isSharingLocation, setIsShari
                   <Undo2 size={20} />
                 </button>
                 <div className="comm-avatar-wrap square-avatar">
-                  {activeComm.iconType === 'upload' && sanitizeImageSrc(activeComm.icon) ? (
-                    <img src={sanitizeImageSrc(activeComm.icon)} alt={activeComm.name} className="comm-uploaded-icon-hdr rounded-square" />
+                  {activeComm.iconType === 'upload' && (activeComm.avatarUrl || '') && validateImageSrc(activeComm.avatarUrl) ? (
+                    <img src={validateImageSrc(activeComm.avatarUrl)} alt={activeComm.name} className="comm-uploaded-icon-hdr rounded-square" />
                   ) : (
                     getCommIcon(activeComm)
                   )}
@@ -2009,8 +2019,8 @@ const CommunitiesView = ({ onOpenMessage, onClose, isSharingLocation, setIsShari
 
               {iconMode === 'upload' && (
                 <div className="upload-icon-row" style={{ marginTop: '0.5rem' }}>
-                  {sanitizeImageSrc(uploadedIcon) ? (
-                    <img src={sanitizeImageSrc(uploadedIcon)} alt="Uploaded Icon" className="upload-preview-thumb" />
+                  {validateImageSrc(uploadedIcon) ? (
+                    <img src={validateImageSrc(uploadedIcon)} alt="Uploaded Icon" className="upload-preview-thumb" />
                   ) : (
                     <div className="upload-preview-thumb-placeholder">No Image</div>
                   )}
@@ -2127,8 +2137,8 @@ const CommunitiesView = ({ onOpenMessage, onClose, isSharingLocation, setIsShari
 
                 {editIconMode === 'upload' && (
                   <div className="upload-icon-row" style={{ marginTop: '0.5rem' }}>
-                    {sanitizeImageSrc(editUploadedIcon) ? (
-                      <img src={sanitizeImageSrc(editUploadedIcon)} alt="Uploaded Icon" className="upload-preview-thumb" />
+                    {validateImageSrc(editUploadedIcon) ? (
+                      <img src={validateImageSrc(editUploadedIcon)} alt="Uploaded Icon" className="upload-preview-thumb" />
                     ) : (
                       <div className="upload-preview-thumb-placeholder">No Image</div>
                     )}
