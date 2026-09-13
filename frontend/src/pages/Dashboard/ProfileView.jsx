@@ -2,9 +2,9 @@ import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { createPortal } from 'react-dom';
 import * as maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 
-maplibregl.setWorkerUrl(maplibreWorkerUrl);
+const workerUrl = `${import.meta.env.BASE_URL || '/'}maplibre/maplibre-gl-worker.mjs`;
+maplibregl.setWorkerUrl(workerUrl);
 import {
   MoreHorizontal, Award, UserPlus, ShieldAlert,
   Copy, Edit3, LogOut, Check, Sparkles,
