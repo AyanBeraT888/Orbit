@@ -14,13 +14,39 @@ const initCleanupJobs = require('./utils/cleanup');
 const locationSocket = require('./sockets/locationSocket');
 const { spawn } = require('child_process');
 const path = require('path');
+const fs = require('fs');
 
 // Spawn Python Geo-Addressing Service
 let pythonProcess = null;
 const startPythonService = () => {
+  // If an external service URL is configured, use it directly
+  if (process.env.GEO_ADDRESSING_SERVICE_URL && 
+      !process.env.GEO_ADDRESSING_SERVICE_URL.includes('127.0.0.1') && 
+      !process.env.GEO_ADDRESSING_SERVICE_URL.includes('localhost')) {
+    console.log(`[Geo-Addressing]: Using external service at ${process.env.GEO_ADDRESSING_SERVICE_URL}`);
+    return;
+  }
+
   console.log('Starting Python Geo-Addressing Service...');
-  const venvPython = path.join(__dirname, 'venv', 'Scripts', 'python.exe');
-  pythonProcess = spawn(venvPython, [
+
+  // Find python executable across platforms (Windows / Linux / Docker container)
+  const venvPythonWin = path.join(__dirname, 'venv', 'Scripts', 'python.exe');
+  const venvPythonUnix = path.join(__dirname, 'venv', 'bin', 'python');
+
+  let pythonCmd = process.env.PYTHON_PATH;
+  if (!pythonCmd) {
+    if (fs.existsSync(venvPythonWin)) {
+      pythonCmd = venvPythonWin;
+    } else if (fs.existsSync(venvPythonUnix)) {
+      pythonCmd = venvPythonUnix;
+    } else {
+      pythonCmd = process.platform === 'win32' ? 'python' : 'python3';
+    }
+  }
+
+  console.log(`[Geo-Addressing]: Using Python executable: ${pythonCmd}`);
+
+  pythonProcess = spawn(pythonCmd, [
     '-m', 'uvicorn', 'geo_addressing.api:app', '--host', '127.0.0.1', '--port', '0'
   ], {
     cwd: __dirname,
@@ -75,13 +101,51 @@ process.on('exit', () => {
   }
 });
 
+// Configure CORS origin verification
+const isOriginAllowed = (origin) => {
+  if (!origin) return true; // allow server-to-server or non-browser requests
+  const configured = process.env.FRONTEND_URL 
+    ? process.env.FRONTEND_URL.split(',').map(s => s.trim()) 
+    : ['http://localhost:5173', 'http://localhost:5000'];
+
+  if (configured.includes('*') || configured.includes(origin)) return true;
+  // Allow GitHub Pages origins
+  if (origin.endsWith('.github.io')) return true;
+  return false;
+};
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (isOriginAllowed(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`Not allowed by CORS: ${origin}`));
+    }
+  },
+  methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+  credentials: true
+};
 
 const app = express();
+app.set('trust proxy', 1);
+
+// Health check endpoint for cloud load balancers and orchestrators
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', service: 'orb-backend', timestamp: new Date().toISOString() });
+});
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL || "http://localhost:5173", // Strict origin
-    methods: ["GET", "POST"]
+    origin: (origin, callback) => {
+      if (isOriginAllowed(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Socket CORS blocked origin: ${origin}`));
+      }
+    },
+    methods: ["GET", "POST"],
+    credentials: true
   }
 });
 
@@ -104,10 +168,7 @@ app.use(helmet({
   // MapLibre GL loads cross-origin tile resources; COEP would block them
   crossOriginEmbedderPolicy: false,
 }));
-app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:5173",
-  methods: ['GET', 'POST', 'PATCH', 'DELETE']
-}));
+app.use(cors(corsOptions));
 app.use(express.json({ limit: '10kb' }));
 
 // Global Rate Limiting
@@ -122,9 +183,9 @@ const globalLimiter = rateLimit({
 // Apply the rate limiting middleware to all requests
 app.use(globalLimiter);
 
-
 // Reject HTTP in production (assuming proxy handles HTTPS or process.env.NODE_ENV)
 app.use((req, res, next) => {
+  if (req.path === '/health') return next();
   if (process.env.NODE_ENV === 'production' && !req.secure && req.get('x-forwarded-proto') !== 'https') {
     return res.status(400).json({ error: 'HTTPS required' });
   }

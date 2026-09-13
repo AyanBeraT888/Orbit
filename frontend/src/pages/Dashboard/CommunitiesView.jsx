@@ -11,6 +11,7 @@ import './CommunitiesView.css';
 import ProfileView from './ProfileView';
 import LottieToggle from '../../components/LottieToggle';
 import { compressImage } from '../../utils/imageCompressor';
+import { sanitizeImageSrc } from '../../utils/sanitizeUrl';
 
 /* ─── Predefined Orb Avatars ──────────────────────────────── */
 const ORB_AVATARS = [
@@ -774,22 +775,31 @@ const CommunitiesView = ({ onOpenMessage, onClose, isSharingLocation, setIsShari
 
   // File upload handler
   const handleFileUpload = async (e, target) => {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
     if (!file) return;
+
+    const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+      console.warn('Invalid file type uploaded. Only JPEG, PNG, WebP, and GIF are allowed.');
+      return;
+    }
+
     try {
       const compressed = await compressImage(file, { maxWidth: 800, quality: 0.82 });
       console.log(`⚡ Community Icon compressed: ${compressed.originalSizeFormatted} → ${compressed.compressedSizeFormatted} (${compressed.savingsPercent} space saved)`);
+      const safeDataUrl = sanitizeImageSrc(compressed.dataUrl);
       if (target === 'create') {
-        setUploadedIcon(compressed.dataUrl);
+        setUploadedIcon(safeDataUrl);
       } else {
-        setEditUploadedIcon(compressed.dataUrl);
+        setEditUploadedIcon(safeDataUrl);
       }
     } catch (err) {
       console.warn('Image compression fallback:', err);
       const reader = new FileReader();
       reader.onloadend = () => {
-        if (target === 'create') setUploadedIcon(reader.result);
-        else setEditUploadedIcon(reader.result);
+        const safeDataUrl = sanitizeImageSrc(reader.result);
+        if (target === 'create') setUploadedIcon(safeDataUrl);
+        else setEditUploadedIcon(safeDataUrl);
       };
       reader.readAsDataURL(file);
     }
@@ -1317,8 +1327,8 @@ const CommunitiesView = ({ onOpenMessage, onClose, isSharingLocation, setIsShari
                     }}
                   >
                     <div className="comm-square-icon-wrap">
-                      {c.iconType === 'upload' ? (
-                        <img src={c.icon} alt={c.name} className="comm-uploaded-icon-thumb rounded-square" />
+                      {c.iconType === 'upload' && sanitizeImageSrc(c.icon) ? (
+                        <img src={sanitizeImageSrc(c.icon)} alt={c.name} className="comm-uploaded-icon-thumb rounded-square" />
                       ) : (
                         <span className="comm-emoji-large">{getCommIcon(c)}</span>
                       )}
@@ -1431,8 +1441,8 @@ const CommunitiesView = ({ onOpenMessage, onClose, isSharingLocation, setIsShari
                   <Undo2 size={20} />
                 </button>
                 <div className="comm-avatar-wrap square-avatar">
-                  {activeComm.iconType === 'upload' ? (
-                    <img src={activeComm.icon} alt={activeComm.name} className="comm-uploaded-icon-hdr rounded-square" />
+                  {activeComm.iconType === 'upload' && sanitizeImageSrc(activeComm.icon) ? (
+                    <img src={sanitizeImageSrc(activeComm.icon)} alt={activeComm.name} className="comm-uploaded-icon-hdr rounded-square" />
                   ) : (
                     getCommIcon(activeComm)
                   )}
@@ -1999,8 +2009,8 @@ const CommunitiesView = ({ onOpenMessage, onClose, isSharingLocation, setIsShari
 
               {iconMode === 'upload' && (
                 <div className="upload-icon-row" style={{ marginTop: '0.5rem' }}>
-                  {uploadedIcon ? (
-                    <img src={uploadedIcon} alt="Uploaded Icon" className="upload-preview-thumb" />
+                  {sanitizeImageSrc(uploadedIcon) ? (
+                    <img src={sanitizeImageSrc(uploadedIcon)} alt="Uploaded Icon" className="upload-preview-thumb" />
                   ) : (
                     <div className="upload-preview-thumb-placeholder">No Image</div>
                   )}
@@ -2117,8 +2127,8 @@ const CommunitiesView = ({ onOpenMessage, onClose, isSharingLocation, setIsShari
 
                 {editIconMode === 'upload' && (
                   <div className="upload-icon-row" style={{ marginTop: '0.5rem' }}>
-                    {editUploadedIcon ? (
-                      <img src={editUploadedIcon} alt="Uploaded Icon" className="upload-preview-thumb" />
+                    {sanitizeImageSrc(editUploadedIcon) ? (
+                      <img src={sanitizeImageSrc(editUploadedIcon)} alt="Uploaded Icon" className="upload-preview-thumb" />
                     ) : (
                       <div className="upload-preview-thumb-placeholder">No Image</div>
                     )}

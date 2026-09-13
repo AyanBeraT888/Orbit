@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: orb-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - NODE_ENV=production
+      - FRONTEND_URL=http://localhost:5173,https://ayanberat888.github.io
+      - FIREBASE_SERVICE_ACCOUNT=${FIREBASE_SERVICE_ACCOUNT:-}
+      - AGORA_APP_ID=${AGORA_APP_ID:-}
+      - AGORA_APP_CERTIFICATE=${AGORA_APP_CERTIFICATE:-}
+      - GEO_ADDRESSING_API_KEY=${GEO_ADDRESSING_API_KEY:-secure_internal_token_2026}
+    env_file:
+      - path: backend/.env
+        required: false
