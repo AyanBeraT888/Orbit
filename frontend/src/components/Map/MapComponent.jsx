@@ -8,6 +8,9 @@ import {
 } from 'lucide-react';
 import * as maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
+
+maplibregl.setWorkerUrl(maplibreWorkerUrl);
 import api from '../../services/api';
 import MapDetailsPanel from './MapDetailsPanel';
 import { escapeHtml } from '../../utils/escapeHtml';
@@ -1125,11 +1128,11 @@ export default function MapComponent({ center, markers, currentUserId }) {
   const mapStyles = {
     locationiq: locationIqKey && locationIqKey !== 'YOUR_LOCATIONIQ_API_KEY'
       ? `https://tiles.locationiq.com/v3/streets/vector.json?key=${locationIqKey}`
-      : 'https://tiles.openfreemap.org/styles/liberty',
+      : 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
     ola: olaKey && olaKey !== 'YOUR_OLA_MAPS_API_KEY'
       ? `https://api.olamaps.io/tiles/vector/v1/styles/default-light-standard/style.json?api_key=${olaKey}`
-      : 'https://tiles.openfreemap.org/styles/liberty',
-    mappls: 'https://tiles.openfreemap.org/styles/liberty' // Fallback for Mappls until native integration
+      : 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
+    mappls: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json'
   };
 
   // Dynamically change map style when provider changes
@@ -1161,11 +1164,11 @@ export default function MapComponent({ center, markers, currentUserId }) {
     const mapStyles = {
       locationiq: locationIqKey && locationIqKey !== 'YOUR_LOCATIONIQ_API_KEY'
         ? `https://tiles.locationiq.com/v3/streets/vector.json?key=${locationIqKey}`
-        : 'https://tiles.openfreemap.org/styles/liberty',
+        : 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
       ola: olaKey && olaKey !== 'YOUR_OLA_MAPS_API_KEY'
         ? `https://api.olamaps.io/tiles/vector/v1/styles/default-light-standard/style.json?api_key=${olaKey}`
-        : 'https://tiles.openfreemap.org/styles/liberty',
-      mappls: 'https://tiles.openfreemap.org/styles/liberty' // Fallback for Mappls until native integration
+        : 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
+      mappls: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json'
     };
 
     const map = new maplibregl.Map({
@@ -1180,6 +1183,11 @@ export default function MapComponent({ center, markers, currentUserId }) {
     });
 
     mapInstanceRef.current = map;
+    window.__orbitMap = map;
+
+    map.on('error', (e) => {
+      console.error('[MapLibre Error]:', e?.error?.message || e?.message || e);
+    });
 
     map.on('load', () => {
       map.addSource('satellite', {
@@ -3994,7 +4002,7 @@ export default function MapComponent({ center, markers, currentUserId }) {
       )}
 
       <div style={{ position: 'absolute', bottom: 8, right: 8, zIndex: 99, fontSize: 9, color: 'rgba(0,0,0,0.4)', background: 'rgba(255,255,255,0.7)', padding: '2px 6px', borderRadius: 4 }}>
-        {mapStyle === 'street' ? '© OpenFreeMap © OpenStreetMap' : '© Esri World Imagery © OpenStreetMap'}
+        {mapStyle === 'street' ? '© CARTO © OpenStreetMap' : '© Esri World Imagery © OpenStreetMap'}
       </div>
 
       {/* Animations styling */}

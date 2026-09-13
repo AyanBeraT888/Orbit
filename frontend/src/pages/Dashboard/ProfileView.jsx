@@ -2,6 +2,9 @@ import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { createPortal } from 'react-dom';
 import * as maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
+
+maplibregl.setWorkerUrl(maplibreWorkerUrl);
 import {
   MoreHorizontal, Award, UserPlus, ShieldAlert,
   Copy, Edit3, LogOut, Check, Sparkles,
@@ -386,7 +389,7 @@ const FullScreenMapPortfolio = ({
 
     const map = new maplibregl.Map({
       container: mapContainerRef.current,
-      style: 'https://tiles.openfreemap.org/styles/liberty',
+      style: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
       center: [centerLng, centerLat],
       zoom: zoomLevel,
       minZoom: 3,
